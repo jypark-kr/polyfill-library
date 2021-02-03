@@ -141,7 +141,7 @@ const jobConfigs = browsers.flatMap(browser => {
 
 let jobs = [];
 
-jobConfigs.forEach(jobConfig => {
+for (const jobConfig of jobConfigs) {
   jobs.push(new TestJob(
     jobConfig.browser,
     url,
@@ -153,7 +153,7 @@ jobConfigs.forEach(jobConfig => {
     jobConfig.polyfillCombinations,
     jobConfig.shard
   ));
-});
+}
 
 const tunnel = new Tunnel();
 
@@ -164,7 +164,7 @@ const printProgress = (function() {
   return jobs => {
     const out = ["-".repeat(80)];
     let readyCount = 0;
-    jobs.forEach(job => {
+    for (const job of jobs) {
       let message = "";
       switch (job.state) {
         case "complete": {
@@ -218,7 +218,7 @@ const printProgress = (function() {
           )} Test config: ${job.configForLog} ${message}`
         );
       }
-    });
+    }
     if (readyCount) {
       out.push(" + " + readyCount + " job(s) queued");
     }
@@ -334,9 +334,9 @@ const printProgress = (function() {
     }
     if (totalFailureCount) {
       console.log(cli.bold.white("\nFailures:"));
-      jobs.forEach(job => {
+      for (const job of jobs) {
         if (job.results && job.results.tests) {
-          job.results.tests.forEach(test => {
+          for (const test of job.results.tests) {
             console.log(" - " + job.name + ":");
             console.log("    -> " + test.name);
             console.log(
@@ -346,7 +346,7 @@ const printProgress = (function() {
                 test.failingSuite
             );
             console.log("       " + test.message);
-          });
+          }
         } else if (job.state !== "complete") {
           console.log(
             " • " +
@@ -357,7 +357,7 @@ const printProgress = (function() {
               cli.red(job.results || "No results")
           );
         }
-      });
+      }
       console.log("");
       throw new Error("Failures detected");
     }
